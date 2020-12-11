@@ -1,0 +1,24 @@
+class fragileplatform:platform{
+    field isDestroyed = false;
+    constructor(x,y):base(x,y){
+
+    }
+
+    function getX(){
+        if(this.isDestroyed){
+            return -200;
+        }else{
+            return this.x;
+        }
+    }
+
+    function destroy(){
+        this.isDestroyed=true;
+    }
+
+    function getPlatformType(){
+        return 4;
+    }
+
+    
+}

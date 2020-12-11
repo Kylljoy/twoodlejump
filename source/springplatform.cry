@@ -1,0 +1,9 @@
+class springplatform:platform{
+
+    constructor (x,y):base(x,y){
+        
+    }
+    function getPlatformType(){
+        return 2;
+    }
+}

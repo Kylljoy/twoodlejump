@@ -1,0 +1,64 @@
+﻿{
+	"id": "twoodleJump",
+	"title": "TwoodleJump",
+	"description": "A cheap and dirty Doodle-jump clone made when I probably should've been working on homework",
+    "icons": [
+		"assets/icon32.png",
+		"assets/icon256.png"
+	],
+	
+	"deps": [
+		"%TWOCANS_SDK%/TwoCansAlpha4"
+	],
+
+	"source": "source",
+	"compilerlocale": "en",
+	"output": "output/%TARGET_NAME%",
+	"delegate-main-to": "TwoCansAlpha4",
+	
+	"image-sheets": [
+		{ "id": "twocans_everything", "prefix": "*" }
+	],
+	
+	"guidseed": "com.twocansandstring.demos.SimpleProject,v1,%TARGET_NAME%",
+	
+	"vars": [
+		{ "name": "screen_width", "value": 600 },
+		{ "name": "screen_height", "value": 600 },
+		{ "name": "use_beta_endpoint", "value": false },
+		{ "name": "game_title", "value": "TwoodleJump" },
+		{ "name": "initial_scene", "value": "main" },
+		{ "name": "use_60_fps", "value": true },
+		{ "name": "enable_wasd", "value": true },
+		{ "name": "thumbnail", "value": "assets/logo.png" }
+	
+	],
+	
+	"targets": [
+		{
+			"name": "csharp",
+			"platform": "csharp-app"
+		},
+		{
+			"name":"twocans",
+			"platform":"javascript-app",
+			"vars":[{"name":"fontScaling","value":1.32}]
+		},
+		{
+			"name": "java",
+			"platform": "java-app"
+		},
+		{
+			"name": "python",
+			"platform": "python-app"
+		},
+		{
+			"name": "ios",
+			"platform": "javascript-app-ios"
+		},
+		{
+			"name": "android",
+			"platform": "javascript-app-android"
+		}
+	]
+}

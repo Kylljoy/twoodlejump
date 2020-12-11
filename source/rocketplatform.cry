@@ -1,0 +1,10 @@
+class rocketplatform:platform{
+
+    constructor(x,y):base(x,y){
+        
+    }
+
+    function getPlatformType(){
+        return 3;
+    }
+}

@@ -1,0 +1,28 @@
+class platform{
+    field x=0;
+    field y=0;
+
+    constructor(x,y){
+        this.x=x;
+        this.y=y;            
+    }
+
+    function getX(){
+        return this.x;
+    }
+
+    function getY(){
+        return this.y;
+    }
+
+    function update(){
+    }
+
+    function getPlatformType(){
+        return 0;
+    }
+
+
+
+
+}

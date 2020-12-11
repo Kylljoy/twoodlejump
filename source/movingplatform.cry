@@ -1,0 +1,29 @@
+import Random;
+class movingplatform:platform{
+        field isminus=Random.randomBool();
+        field centerx=0;
+        
+        constructor(x,y):base(x,y){
+            this.centerx=x;
+        }
+
+        function update(){
+            if(this.x<=this.centerx-100 || this.x<=0){
+                this.isminus=false;
+            }else if(this.x>=this.centerx+100 || this.x>=300){
+                this.isminus=true;
+            }
+
+            if(this.isminus){
+                this.x-=3;
+            }else{
+                this.x+=3;
+            }
+        }
+
+        function getPlatformType(){
+            return 1;
+        }
+
+
+}
