@@ -9,13 +9,13 @@ class main:AbstractScene{
 	field platforms=[];
 	field temps=[];
 	field level=0;
+	field high=0;
 	field twoodle_x=200;
 	field twoodle_y=50;
 	field twoodle_dy=0;
-	field R=[100,100,200,60,100];
-	field G=[200,100,100,60,80];
-	field B=[100,200,100,60,20];
-	field failtext = this.textrenderer.setColor(255,0,0).setSize(20).render("YOU HAVE FAILED!");
+	field R=[100,100,200,200,100];
+	field G=[200,100,100,200,80];
+	field B=[100,200,100,200,20];
 
 	constructor(){
 		for(i=0;i<8;i++){
@@ -42,6 +42,7 @@ class main:AbstractScene{
 		Graphics2D.Draw.rectangle(0,0,100,600,0,0,0);
 		Graphics2D.Draw.rectangle(500,0,100,600,0,0,0);
 		this.textrenderer.render(this.level).draw(0,0);
+		this.textrenderer.render(this.high).draw(500,0);
 		for(i=0;i<this.platforms.length;i++){
 			Graphics2D.Draw.rectangle(this.platforms[i].getX()+100,600-(this.platforms[i].getY()-this.level),75,15,this.R[this.platforms[i].getPlatformType()],this.G[this.platforms[i].getPlatformType()],this.B[this.platforms[i].getPlatformType()]);
 		}
@@ -162,6 +163,9 @@ class main:AbstractScene{
 			}
 			if(this.twoodle_y<this.level){
 				this.newGame();
+			}
+			if(this.level>this.high){
+				this.high=this.level;
 			}
 	}
 }

@@ -40,6 +40,10 @@
 			"platform": "csharp-app"
 		},
 		{
+			"name": "standalone-web",
+			"platform": "javascript-app"
+		},
+		{
 			"name":"twocans",
 			"platform":"javascript-app",
 			"vars":[{"name":"fontScaling","value":1.32}]
