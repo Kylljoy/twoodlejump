@@ -1,10 +1,13 @@
 ﻿import TwoCansAlpha4;
 import Graphics2D;
 import Random;
+import Graphics2DText;
 
 class main:AbstractScene{
 	
+	field textrenderer=FontResource.fromSystem("Arial").getRenderer().setColor(255,255,255);
 	field platforms=[];
+	field temps=[];
 	field level=0;
 	field twoodle_x=200;
 	field twoodle_y=50;
@@ -12,6 +15,7 @@ class main:AbstractScene{
 	field R=[100,100,200,60,100];
 	field G=[200,100,100,60,80];
 	field B=[100,200,100,60,20];
+	field failtext = this.textrenderer.setColor(255,0,0).setSize(20).render("YOU HAVE FAILED!");
 
 	constructor(){
 		for(i=0;i<8;i++){
@@ -20,12 +24,29 @@ class main:AbstractScene{
 		this.platforms.add(new platform(162,50));
 	}
 
+	function newGame(){
+		for(i=0;i<8;i++){
+			this.platforms[i]=(new platform(Random.randomInt(0,325),(100*i)+Random.randomInt(0,100)-50));
+		}
+		this.temps=[];
+		this.platforms[-1]=new platform(162,50);
+		this.level=0;
+		this.twoodle_x=200;
+		this.twoodle_y=50;
+		this.twoodle_dy=0;
+	}
+	
+
 	function render(){
 		Graphics2D.Draw.fill(255,255,200);
 		Graphics2D.Draw.rectangle(0,0,100,600,0,0,0);
 		Graphics2D.Draw.rectangle(500,0,100,600,0,0,0);
+		this.textrenderer.render(this.level).draw(0,0);
 		for(i=0;i<this.platforms.length;i++){
 			Graphics2D.Draw.rectangle(this.platforms[i].getX()+100,600-(this.platforms[i].getY()-this.level),75,15,this.R[this.platforms[i].getPlatformType()],this.G[this.platforms[i].getPlatformType()],this.B[this.platforms[i].getPlatformType()]);
+		}
+		for(i=0;i<this.temps.length;i++){
+			Graphics2D.Draw.rectangle(this.temps[i].getX()+100,600-(this.temps[i].getY()-this.level),75,15,this.R[this.temps[i].getPlatformType()],this.G[this.temps[i].getPlatformType()],this.B[this.temps[i].getPlatformType()]);
 		}
 		Graphics2D.Draw.rectangle(this.twoodle_x+100-25,600-(this.twoodle_y-this.level)-90,50,90,0,0,0);
 		Graphics2D.Draw.rectangle(this.twoodle_x+100-20,600-(this.twoodle_y-this.level)-85,40,80,255,255,255);
@@ -45,7 +66,7 @@ class main:AbstractScene{
 						this.twoodle_dy=-40;
 						break;
 					}else if(this.platforms[i].getPlatformType()==3){
-						this.twoodle_dy=-60;
+						this.twoodle_dy=-100;
 						break;
 					}else if(this.platforms[i].getPlatformType()==4){
 						this.twoodle_dy=-20;
@@ -55,10 +76,14 @@ class main:AbstractScene{
 					}
 				}
 			}
-			if(this.twoodle_y>200){
-				this.level=this.twoodle_y-200;
-			}else{
-				this.level=0;
+			for(i=0;i<this.temps.length;i++){
+				if(this.temps[i].getX()<(this.twoodle_x+25)&&(this.temps[i].getX()+75)>(this.twoodle_x-25)&&this.twoodle_y+5>this.temps[i].getY()&&this.twoodle_y-this.twoodle_dy-5<this.temps[i].getY()){
+						this.twoodle_dy=-20;
+						this.temps[i].destroy();
+					}
+				}
+			if(this.twoodle_y>400 && this.twoodle_y>this.level+400){
+				this.level=this.twoodle_y-400;
 			}
 			this.twoodle_y-=this.twoodle_dy;
 			if(input.isKeyPressed(KeyboardKey.LEFT)&&this.twoodle_x>30){
@@ -73,20 +98,50 @@ class main:AbstractScene{
 
 			for(i=0;i<this.platforms.length;i++){
 				this.platforms[i].update();
+				//If the distance between this platform and any other platform is any greater than 200 px, create a bridge between them
+				max_distance=9999;
+				nonetaller=true;
+				for(m=0;m<this.platforms.length;m++){
+					if(this.platforms[m].getY()-this.platforms[i].getY()>0){
+						nonetaller=false;
+						if(this.platforms[m].getY()-this.platforms[i].getY()<max_distance){
+							max_distance=this.platforms[m].getY()-this.platforms[i].getY();
+						}
+					}
+				}
+					for(m=0;m<this.temps.length;m++){
+					if(this.temps[m].getY()-this.platforms[i].getY()>0){
+						if(this.temps[m].getY()-this.platforms[i].getY()<max_distance){
+							max_distance=this.temps[m].getY()-this.platforms[i].getY();
+						}
+					}
+				}
+				if(max_distance>400 && !nonetaller){
+
+					this.temps.add(new fragileplatform(Random.randomInt(0,325),this.platforms[i].getY()+Random.randomInt(250)));
+				}
 				if((this.platforms[i].getY()-this.level)<=-100){
 					odd=Random.randomInt(100);
 					if(odd<30){
-						this.platforms[i]=new movingplatform(Random.randomInt(0,325),this.level+600+Random.randomInt(25));
+						this.platforms[i]=new movingplatform(Random.randomInt(0,325),this.platforms[i].getY()+800+Random.randomInt(25));
 					}else if(odd<40&&odd>30){
-						this.platforms[i]=new springplatform(Random.randomInt(0,325),this.level+600+Random.randomInt(25));
+						this.platforms[i]=new springplatform(Random.randomInt(0,325),this.platforms[i].getY()+800+Random.randomInt(25));
 					}else if(odd>50&&odd<65){
-						this.platforms[i]=new fragileplatform(Random.randomInt(0,325),this.level+600+Random.randomInt(25));
+						this.platforms[i]=new fragileplatform(Random.randomInt(0,325),this.platforms[i].getY()+800+Random.randomInt(25));
 					}else if(odd>97){
-						this.platforms[i]=new rocketplatform(Random.randomInt(0,325),this.level+600+Random.randomInt(25));
+						this.platforms[i]=new rocketplatform(Random.randomInt(0,325),this.platforms[i].getY()+800+Random.randomInt(25));
 					}else{
-					this.platforms[i]=new platform(Random.randomInt(0,325),this.level+600+Random.randomInt(25));
+					this.platforms[i]=new platform(Random.randomInt(0,325),this.platforms[i].getY()+800+Random.randomInt(25));
 				}
 				}
-		}
+			}
+			for(q=0;q<this.temps.length;q++){
+				if(this.temps[q].getY()-this.level<=-100){
+					this.temps.remove(q);
+				}
+			}
+			if(this.twoodle_y<this.level){
+				this.newGame();
+			}
 	}
 }
