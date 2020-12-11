@@ -66,7 +66,7 @@ class main:AbstractScene{
 						this.twoodle_dy=-40;
 						break;
 					}else if(this.platforms[i].getPlatformType()==3){
-						this.twoodle_dy=-100;
+						this.twoodle_dy=-60;
 						break;
 					}else if(this.platforms[i].getPlatformType()==4){
 						this.twoodle_dy=-20;
@@ -116,9 +116,29 @@ class main:AbstractScene{
 						}
 					}
 				}
-				if(max_distance>400 && !nonetaller){
+				for(p=0;p<this.temps.length;p++){
+				max_distance=9999;
+				nonetaller=true;
+				for(m=0;m<this.platforms.length;m++){
+					if(this.platforms[m].getY()-this.temps[p].getY()>0){
+						nonetaller=false;
+						if(this.platforms[m].getY()-this.temps[p].getY()<max_distance){
+							max_distance=this.platforms[m].getY()-this.temps[p].getY();
+						}
+					}
+				}
+					for(m=0;m<this.temps.length;m++){
+					if(this.temps[m].getY()-this.temps[p].getY()>0){
+						if(this.temps[m].getY()-this.temps[p].getY()<max_distance){
+							max_distance=this.temps[m].getY()-this.temps[p].getY();
+						}
+					}
+				}
+				
+				if(max_distance>350 && !nonetaller){
 
-					this.temps.add(new fragileplatform(Random.randomInt(0,325),this.platforms[i].getY()+Random.randomInt(250)));
+					this.temps.add(new fragileplatform(Random.randomInt(0,325),this.temps[p].getY()+Random.randomInt(250)));
+				}
 				}
 				if((this.platforms[i].getY()-this.level)<=-100){
 					odd=Random.randomInt(100);
