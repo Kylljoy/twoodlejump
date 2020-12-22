@@ -87,10 +87,12 @@ class main:AbstractScene{
 				this.level=this.twoodle_y-400;
 			}
 			this.twoodle_y-=this.twoodle_dy;
-			if(input.isKeyPressed(KeyboardKey.LEFT)&&this.twoodle_x>30){
+			left_pressed = input.isKeyPressed(KeyboardKey.LEFT);
+			right_pressed = input.isKeyPressed(KeyboardKey.RIGHT);
+			if(left_pressed && !right_pressed && this.twoodle_x>30){
 				this.twoodle_x-=15;
 			}
-			else if(input.isKeyPressed(KeyboardKey.RIGHT)&&this.twoodle_x<370){
+			else if(right_pressed && !left_pressed && this.twoodle_x<370){
 				this.twoodle_x+=15;
 			}
 			else if(input.isKeyPressed(KeyboardKey.DOWN)){
